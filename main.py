@@ -7,5 +7,3 @@ n = np.linspace(-5,5,500)
 
 plt.plot(n, n**8)
 plt.show()
-
-d
