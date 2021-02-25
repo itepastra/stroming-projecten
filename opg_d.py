@@ -8,8 +8,8 @@ theta0 = 20
 theta1 = 100
 ks = 97e-6
 
-dt = 0.0001
-dr = 0.01
+dt = 0.000001
+dr = 0.0001
 tend = 100
 locked = False
 
@@ -41,9 +41,11 @@ print(f"this should be *much* smaller than 1: {ks*dt/dr**2}")
 rs = np.arange(0, Radius, dr)
 n = 0
 endTemps = []
-while n <= 4:
+while n < 4:
     ts = np.arange(tend*n, tend*(n+1), dt)
     endTemps = ThetaInternal(rs, ts, Temps=endTemps, lockedr0=locked)
     plt.plot(rs, endTemps)
-    plt.savefig(f"{ks}-{n}_{'locked' if locked else 'free' }.png")
     n+=1
+    print(endTemps[0])
+
+plt.savefig(f"{ks}-{n}_{'locked' if locked else 'free' }.png")
