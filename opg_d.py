@@ -8,8 +8,8 @@ theta0 = 20
 theta1 = 100
 ks = 97e-6
 
-dt = 0.000001
-dr = 0.0001
+dt = 0.0001
+dr = 0.001
 tend = 100
 locked = False
 
@@ -48,4 +48,7 @@ while n < 4:
     n+=1
     print(endTemps[0])
 
+plt.ylabel("$\\theta$ ($\degree$C)")
+plt.xlabel("$r$ (m)")
+plt.tight_layout()
 plt.savefig(f"{ks}-{n}_{'locked' if locked else 'free' }.png")

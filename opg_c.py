@@ -4,8 +4,8 @@ import sys
 
 
 Radius = 0.2
-theta0 = 100
-theta1 = 10
+theta0 = 10
+theta1 = 100
 ks = 100e-4
 
 dt = 0.0001
@@ -48,4 +48,9 @@ for t in targetTs:
     ts = np.arange(0, t, dt)
     endTemps = ThetaInternal(rs, ts, Temps=endTemps, lockedr0=locked)
     plt.plot(rs/Radius, (np.array(endTemps)-theta0)/(theta1-theta0))
-    plt.savefig(f"{theta0}-{theta1}_{ks}-{round(t, 3)}_{'locked' if locked else 'free' }.png")
+    
+plt.ylabel("$\\theta$ ($\degree$C)")
+plt.xlabel("$r$ (m)")
+plt.tight_layout()
+
+plt.savefig(f"{theta0}-{theta1}_{ks}-{round(t, 3)}_{'locked' if locked else 'free' }.png")

@@ -8,8 +8,8 @@ theta0 = 20
 theta1 = 100
 ks = 98e-6
 
-dt = 10
-dr = 0.05
+dt = 0.001
+dr = 0.004
 tend = 100
 locked = False
 
@@ -47,4 +47,7 @@ while n < 4:
     plt.plot(rs, endTemps)
     n+=1
 
+plt.ylabel("$\\theta$ ($\degree$C)")
+plt.xlabel("$r$ (m)")
+plt.tight_layout()
 plt.savefig(f"{ks}-{n}_{dr}.{dt}.png")
