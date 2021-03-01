@@ -38,6 +38,7 @@ def ThetaInternal(rs, ts, Temps=[], tstep=dt, lockedr0=False):
         if t%10 == 0:
             print(t)
         Temps = EuLeRfOrThEta(Temps, rs, tstep, lockedr0=lockedr0)
+        
     return Temps
 
 print(targetTs)
