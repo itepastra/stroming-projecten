@@ -1,17 +1,34 @@
+'''
+OPGAVE C
+Stromingsleer en Transportverschijnselen (NS-265B)
+Deadline: 17:00, 1/3/2021
+
+Authors:
+- Thijs Aarts (6716776)
+- Oussama Benchikhi (6930263)
+- Martijn Brouwer (6859488)
+- Victor Schyns (6550517)
+'''
+
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import sys
 
 
 Radius = 0.2
-theta0 = 20
+theta0 = 10
 theta1 = 100
-ks = 97e-6
+ks = 100e-4
 
-dt = 0.001
-dr = 0.001
-tend = 100
-locked = False
+dt = 0.0001
+dr = 0.01
+
+locked = True
+
+Fo = np.array([0.05, 0.1, 1.0])
+targetTs = (Fo*Radius**2)/ks
+colors = ['tab:blue', 'tab:orange', 'tab:green']
 
 def EuLeRfOrThEta(temps, rs, tstep=dt, k=ks, lockedr0=False):
     newTemps = []
@@ -32,23 +49,27 @@ def ThetaInternal(rs, ts, Temps=[], tstep=dt, lockedr0=False):
     if len(Temps) == 0:
         Temps = [theta0 if i != len(rs) - 1 else theta1 for i in range(len(rs))]
     for t in ts:
-        if t%1 == 0:
+        if t%10 == 0:
             print(t)
         Temps = EuLeRfOrThEta(Temps, rs, tstep, lockedr0=lockedr0)
     return Temps
 
-print(f"this should be *much* smaller than 1: {ks*dt/dr**2}")
+print(targetTs)
+print(f"This should be *much* smaller than 1: {ks*dt/dr**2}")
 rs = np.arange(0, Radius, dr)
-n = 0
 endTemps = []
-while n < 4:
-    ts = np.arange(tend*n, tend*(n+1), dt)
+for t in targetTs:
+    ts = np.arange(0, t, dt)
     endTemps = ThetaInternal(rs, ts, Temps=endTemps, lockedr0=locked)
-    plt.plot(rs, endTemps)
-    n+=1
-    print(endTemps[0])
+    plt.plot(rs/Radius, (np.array(endTemps)-theta0)/(theta1-theta0))
+
+# Ontzichtbare lijnen voor de legenda
+lines = [Line2D([0], [0], color=c, linewidth=3, linestyle='-') for c in colors]
+labels = [f"$F_o$ = {F}" for F in Fo]
+plt.legend(lines, labels)
 
 plt.ylabel("$\\theta$ ($\degree$C)")
 plt.xlabel("$r$ (m)")
 plt.tight_layout()
-plt.savefig(f"{ks}-{n}_{'locked' if locked else 'free' }.png")
+plt.show()
+#plt.savefig(f"{theta0}-{theta1}_{ks}-{round(t, 3)}_{'locked' if locked else 'free' }.png")
