@@ -1,3 +1,4 @@
+from matplotlib.backend_bases import LocationEvent
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -9,5 +10,26 @@ def Circle(origin, radius, n=1000):
     return origin + radius * np.exp(1j * thetas)
 
 
-circle = Circle(-0.1 + 0.22j, 1.12)
+def MakePotential(Gamma, r, U):
+    return lambda z: U * z + U * r**2 / z - 1j * Gamma / (2 * np.pi) *np.log(z)
 
+
+def MakeStreamPlot(potential, r, Nr=1000, Name=0):
+    k = np.linspace(-3,3,Nr)
+    xs, ys = np.meshgrid(k,k)
+    Zs = xs + ys*1j
+    Ps = potential(Zs)
+    Ps2 = np.where(np.absolute(Zs) > r, Ps, 0)
+    print(Ps2)
+    plt.figure()
+    plt.contour(Zs.real, Zs.imag, Ps2.real, levels = 40)
+    plt.axis('equal')
+    # plt.show()
+    plt.savefig(f"gamma-{Name}")
+
+r=1
+u = 1
+
+for gamma in [0,-3]:
+    potential = MakePotential(gamma, r, u)
+    MakeStreamPlot(potential, r, Name=gamma)

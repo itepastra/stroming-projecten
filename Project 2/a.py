@@ -26,6 +26,6 @@ plt.scatter(wingprofile.real,
             wingprofile.imag,
             s=1,
             c=np.linspace(0, 2 * np.pi, len(wingprofile), endpoint=False),
-            cmap='gist_rainbow'),
+            cmap='gist_rainbow')
 plt.axis("equal")
 plt.show()
