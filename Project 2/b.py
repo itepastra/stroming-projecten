@@ -11,25 +11,25 @@ def Circle(origin, radius, n=1000):
 
 
 def MakePotential(Gamma, r, U):
-    return lambda z: U * z + U * r**2 / z - 1j * Gamma / (2 * np.pi) *np.log(z)
+    return lambda z: U * z + U * r**2 / z -1j * Gamma / (2 * np.pi) * np.log(z)
 
 
-def MakeStreamPlot(potential, r, Nr=1000, Name=0):
-    k = np.linspace(-3,3,Nr)
-    xs, ys = np.meshgrid(k,k)
-    Zs = xs + ys*1j
+def MakeStreamPlot(potential, r, Nr=2000, Name=0):
+    k = np.linspace(-3, 3, Nr)
+    xs, ys = np.meshgrid(k, k)
+    Zs = xs + ys * 1j
     Ps = potential(Zs)
-    Ps2 = np.where(np.absolute(Zs) > r, Ps, 0)
-    print(Ps2)
+    Ps2 = np.ma.array(Ps, mask=np.where(np.absolute(Zs) > r, False, True))
     plt.figure()
-    plt.contour(Zs.real, Zs.imag, Ps2.real, levels = 40)
+    plt.contourf(Zs.real, Zs.imag, Ps2.imag, levels=50,cmap='gist_rainbow')
     plt.axis('equal')
-    # plt.show()
+    plt.colorbar()
+    plt.tight_layout()
     plt.savefig(f"gamma-{Name}")
 
-r=1
+r = 1
 u = 1
 
-for gamma in [0,-3]:
+for gamma in [0, -3, -5, -69]:
     potential = MakePotential(gamma, r, u)
     MakeStreamPlot(potential, r, Name=gamma)
