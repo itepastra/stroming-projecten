@@ -6,7 +6,7 @@ import sys
 Radius = 0.2
 theta0 = 20
 theta1 = 100
-ks = 97e-6
+ks = 103e-6
 
 dt = 0.001
 dr = 0.001
@@ -35,6 +35,10 @@ def ThetaInternal(rs, ts, Temps=[], tstep=dt, lockedr0=False):
         if t%1 == 0:
             print(t)
         Temps = EuLeRfOrThEta(Temps, rs, tstep, lockedr0=lockedr0)
+        if Temps[0] >= 85: 
+            print(t, Temps[0])
+            while True:
+                pass
     return Temps
 
 print(f"this should be *much* smaller than 1: {ks*dt/dr**2}")
@@ -43,10 +47,12 @@ n = 0
 endTemps = []
 while n < 4:
     ts = np.arange(tend*n, tend*(n+1), dt)
+    if len(endTemps) > 1:
+        print(endTemps[0])
     endTemps = ThetaInternal(rs, ts, Temps=endTemps, lockedr0=locked)
     plt.plot(rs, endTemps)
     n+=1
-    print(endTemps[0])
+    
 
 plt.ylabel("$\\theta$ ($\degree$C)")
 plt.xlabel("$r$ (m)")
