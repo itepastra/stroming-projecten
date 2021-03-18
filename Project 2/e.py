@@ -64,7 +64,6 @@ for gamma in [-2.65, -2.68, -2.72, -2.75]:
     plt.xlim(1.95, 2.05)
     plt.ylim(-.3, .3)
     # plt.axis('equal')
-    plt.colorbar()
     plt.tight_layout()
     plt.savefig(f"Einzoom_{gamma}.png")
     # plt.show()

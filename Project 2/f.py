@@ -35,6 +35,7 @@ def PotentialData(potential, Nr=2000, lower=-5, upper=5):
 
 
 u = 1
+rho = 1
 transformation = Joukowski(1)
 circle = Circle(circleOrigin, circleRadius)
 wing = transformation(circle)
@@ -42,21 +43,25 @@ wing = transformation(circle)
 for gamma in [-2.72, 5]:
     potential = MakePotential(gamma, circleRadius, u, circleOrigin)
     Zs, data = PotentialData(potential)
+    #wing
     transformedZ = transformation(Zs)
     diffxt = np.diff(data, axis=1)/np.diff(transformedZ, axis=1)
+    wingpress = rho/2*(u**2-np.absolute(diffxt))
     plt.figure()
     plt.plot(wing.real, wing.imag, color="red")
-    plt.contour(transformedZ.real[:,:-1], transformedZ.imag[:,:-1], np.absolute(diffxt), levels=90)
+    plt.contour(transformedZ.real[:,:-1], transformedZ.imag[:,:-1], wingpress, levels=90)
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
     # plt.axis('equal')
     plt.colorbar()
     plt.tight_layout()
     plt.savefig(f"F-wing_{gamma}.png")
+    #circle
     diffx = np.diff(data, axis=1)/np.diff(Zs, axis=1)
+    cylinderpress = rho/2*(u**2-np.absolute(diffx))
     plt.figure()
     plt.plot(circle.real, circle.imag, color="red")
-    plt.contour(Zs.real[:,:-1], Zs.imag[:,:-1], np.absolute(diffx), levels=90)
+    plt.contour(Zs.real[:,:-1], Zs.imag[:,:-1], cylinderpress, levels=90)
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
     # plt.axis('equal')

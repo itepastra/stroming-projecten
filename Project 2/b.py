@@ -19,17 +19,17 @@ def MakeStreamPlot(potential, r, Nr=2000, Name=0):
     xs, ys = np.meshgrid(k, k)
     Zs = xs + ys * 1j
     Ps = potential(Zs)
-    Ps2 = np.ma.array(Ps, mask=np.where(np.absolute(Zs) > r, False, True))
+    Ps2 = np.ma.array(Ps, mask=np.where(np.absolute(Zs) >= r, False, True))
     plt.figure()
-    plt.contourf(Zs.real, Zs.imag, Ps2.imag, levels=50,cmap='gist_rainbow')
+    plt.contour(Zs.real, Zs.imag, Ps2.imag, levels=50,cmap='gist_rainbow')
     plt.axis('equal')
     plt.colorbar()
     plt.tight_layout()
-    plt.savefig(f"gamma-{Name}")
+    plt.savefig(f"gamma-{Name}.png")
 
 r = 1
 u = 1
 
-for gamma in [0, -3, -5, -69]:
+for gamma in [0, -3]:
     potential = MakePotential(gamma, r, u)
     MakeStreamPlot(potential, r, Name=gamma)
