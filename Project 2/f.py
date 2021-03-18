@@ -44,7 +44,7 @@ for gamma in [-2.72, 5]:
     #wing
     transformedZ = transformation(Zs)
     diffxt = np.diff(data, axis=1)/np.diff(transformedZ, axis=1)
-    wingpress = rho/2*(u**2-np.absolute(diffxt))
+    wingpress = rho/2*(u**2-np.absolute(diffxt)**2)
     plt.figure()
     plt.plot(wing.real, wing.imag, color="red")
     plt.contour(transformedZ.real[:,:-1], transformedZ.imag[:,:-1], wingpress, levels=90, cmap = "coolwarm")
@@ -56,7 +56,7 @@ for gamma in [-2.72, 5]:
     plt.savefig(f"F-wing_{gamma}.png")
     #circle
     diffx = np.diff(data, axis=1)/np.diff(Zs, axis=1)
-    cylinderpress = rho/2*(u**2-np.absolute(diffx))
+    cylinderpress = rho/2*(u**2-np.absolute(diffx)**2)
     plt.figure()
     plt.plot(circle.real, circle.imag, color="red")
     plt.contour(Zs.real[:,:-1], Zs.imag[:,:-1], cylinderpress, levels=90, cmap = "coolwarm")
