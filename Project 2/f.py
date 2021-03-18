@@ -1,7 +1,5 @@
-from matplotlib.backend_bases import LocationEvent
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.interpolate as interp
 
 circleRadius = 1.12
 circleOrigin = -0.1 + 0.22j
@@ -49,7 +47,7 @@ for gamma in [-2.72, 5]:
     wingpress = rho/2*(u**2-np.absolute(diffxt))
     plt.figure()
     plt.plot(wing.real, wing.imag, color="red")
-    plt.contour(transformedZ.real[:,:-1], transformedZ.imag[:,:-1], wingpress, levels=90)
+    plt.contour(transformedZ.real[:,:-1], transformedZ.imag[:,:-1], wingpress, levels=90, cmap = "coolwarm")
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
     # plt.axis('equal')
@@ -61,7 +59,7 @@ for gamma in [-2.72, 5]:
     cylinderpress = rho/2*(u**2-np.absolute(diffx))
     plt.figure()
     plt.plot(circle.real, circle.imag, color="red")
-    plt.contour(Zs.real[:,:-1], Zs.imag[:,:-1], cylinderpress, levels=90)
+    plt.contour(Zs.real[:,:-1], Zs.imag[:,:-1], cylinderpress, levels=90, cmap = "coolwarm")
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
     # plt.axis('equal')
