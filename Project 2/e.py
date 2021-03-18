@@ -38,27 +38,7 @@ u = 1
 transformation = Joukowski(1)
 wing = transformation(Circle(circleOrigin, circleRadius))
 
-for gamma in [0, -3]:
-    potential = MakePotential(gamma, circleRadius, u, circleOrigin)
-    Zs, data = PotentialData(potential)
-    transformedZ = transformation(Zs)
-    plt.figure()
-    plt.plot(wing.real, wing.imag, color="red")
-    plt.contour(transformedZ.real,
-                transformedZ.imag,
-                data.imag,
-                levels=90,
-                cmap='gist_rainbow')
-    plt.xlim(-5, 5)
-    plt.ylim(-5, 5)
-    # plt.axis('equal')
-    plt.colorbar()
-    plt.tight_layout()
-    plt.savefig(f"C_{gamma}.png")
-    # plt.show()
-
-# zoomed in plots
-for gamma in [0, -3]:
+for gamma in [-2.65, -2.68, -2.72, -2.75]:
     potential = MakePotential(gamma, circleRadius, u, circleOrigin)
     Zs, data = PotentialData(potential, lower=0, upper=2.2)
     transformedZ = transformation(Zs)
@@ -67,13 +47,27 @@ for gamma in [0, -3]:
         mask=(np.where(
             (transformedZ.real <= 2.05) & (transformedZ.real >= 1.95) &
             (transformedZ.imag <= -0.3) & (transformedZ.imag >= 0.3), True,
-            False)), hard_mask=True)
+            False)))
     transformedZ = np.ma.array(
         transformedZ,
         mask=(np.where(
             (transformedZ.real <= 2.05) & (transformedZ.real >= 1.95) &
             (transformedZ.imag <= -0.3) & (transformedZ.imag >= 0.3), True,
-            False)), hard_mask=True)
+            False)))
+    plt.figure()
+    plt.plot(wing.real, wing.imag, color="red")
+    plt.contour(transformedZ.real,
+                transformedZ.imag,
+                data.imag,
+                levels=450,
+                cmap='gist_rainbow')
+    plt.xlim(1.95, 2.05)
+    plt.ylim(-.3, .3)
+    # plt.axis('equal')
+    plt.colorbar()
+    plt.tight_layout()
+    plt.savefig(f"Einzoom_{gamma}.png")
+    # plt.show()
     plt.figure()
     plt.plot(wing.real, wing.imag, color="red")
     plt.contour(transformedZ.real,
@@ -86,5 +80,5 @@ for gamma in [0, -3]:
     # plt.axis('equal')
     plt.colorbar()
     plt.tight_layout()
-    plt.savefig(f"Cinzoom_{gamma}.png")
+    plt.savefig(f"Einzoompot_{gamma}.png")
     # plt.show()

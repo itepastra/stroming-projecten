@@ -1,7 +1,7 @@
 from matplotlib.backend_bases import LocationEvent
 import numpy as np
 import matplotlib.pyplot as plt
-from numpy.ma import harden_mask
+import scipy.interpolate as interp
 
 circleRadius = 1.12
 circleOrigin = -0.1 + 0.22j
@@ -36,55 +36,30 @@ def PotentialData(potential, Nr=2000, lower=-5, upper=5):
 
 u = 1
 transformation = Joukowski(1)
-wing = transformation(Circle(circleOrigin, circleRadius))
+circle = Circle(circleOrigin, circleRadius)
+wing = transformation(circle)
 
-for gamma in [0, -3]:
+for gamma in [-2.72, 5]:
     potential = MakePotential(gamma, circleRadius, u, circleOrigin)
     Zs, data = PotentialData(potential)
     transformedZ = transformation(Zs)
+    diffxt = np.diff(data, axis=1)/np.diff(transformedZ, axis=1)
     plt.figure()
     plt.plot(wing.real, wing.imag, color="red")
-    plt.contour(transformedZ.real,
-                transformedZ.imag,
-                data.imag,
-                levels=90,
-                cmap='gist_rainbow')
+    plt.contour(transformedZ.real[:,:-1], transformedZ.imag[:,:-1], np.absolute(diffxt), levels=90)
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
     # plt.axis('equal')
     plt.colorbar()
     plt.tight_layout()
-    plt.savefig(f"C_{gamma}.png")
-    # plt.show()
-
-# zoomed in plots
-for gamma in [0, -3]:
-    potential = MakePotential(gamma, circleRadius, u, circleOrigin)
-    Zs, data = PotentialData(potential, lower=0, upper=2.2)
-    transformedZ = transformation(Zs)
-    data = np.ma.array(
-        data,
-        mask=(np.where(
-            (transformedZ.real <= 2.05) & (transformedZ.real >= 1.95) &
-            (transformedZ.imag <= -0.3) & (transformedZ.imag >= 0.3), True,
-            False)), hard_mask=True)
-    transformedZ = np.ma.array(
-        transformedZ,
-        mask=(np.where(
-            (transformedZ.real <= 2.05) & (transformedZ.real >= 1.95) &
-            (transformedZ.imag <= -0.3) & (transformedZ.imag >= 0.3), True,
-            False)), hard_mask=True)
+    plt.savefig(f"F-wing_{gamma}.png")
+    diffx = np.diff(data, axis=1)/np.diff(Zs, axis=1)
     plt.figure()
-    plt.plot(wing.real, wing.imag, color="red")
-    plt.contour(transformedZ.real,
-                transformedZ.imag,
-                data.real,
-                levels=450,
-                cmap='gist_rainbow')
-    plt.xlim(1.95, 2.05)
-    plt.ylim(-.3, .3)
+    plt.plot(circle.real, circle.imag, color="red")
+    plt.contour(Zs.real[:,:-1], Zs.imag[:,:-1], np.absolute(diffx), levels=90)
+    plt.xlim(-5, 5)
+    plt.ylim(-5, 5)
     # plt.axis('equal')
     plt.colorbar()
     plt.tight_layout()
-    plt.savefig(f"Cinzoom_{gamma}.png")
-    # plt.show()
+    plt.savefig(f"F-cyl_{gamma}.png")
